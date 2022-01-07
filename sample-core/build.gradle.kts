@@ -1,3 +1,3 @@
 dependencies {
-    implementation(project(":${rootProject.name}-api"))
+    api(project(":${rootProject.name}-api"))
 }
