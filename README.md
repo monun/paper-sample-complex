@@ -1,4 +1,4 @@
-# PaperMC plugin sample (1.17+)
+# PaperMC plugin sample (1.17.1+)
 
 [![Kotlin](https://img.shields.io/badge/java-17-ED8B00.svg?logo=java)](https://www.azul.com/)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.6.10-585DEF.svg?logo=kotlin)](http://kotlinlang.org)
