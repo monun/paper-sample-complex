@@ -18,20 +18,26 @@ tasks {
         }
     }
 
-    fun Jar.copyToDebugServer() = copy {
-        from(archiveFile)
-        val plugins = File(rootDir, ".debug/plugins/")
-        into(if (File(plugins, archiveFileName.get()).exists()) File(plugins, "update") else plugins)
-    }
-
-    register<Jar>("pluginJar") {
+    fun registerPluginJar(name: String, vararg outputs: Project, configuration: Jar.() -> Unit) = register<Jar>(name) {
         archiveBaseName.set(pluginName)
         archiveVersion.set("")
 
-        listOf(projectAPI, projectCORE, project).forEach { project ->
+        outputs.forEach { project ->
             from(project.sourceSets["main"].output)
         }
 
+        configuration()
+
+        doLast {
+            copy {
+                from(archiveFile)
+                val plugins = File(rootDir, ".debug/plugins/")
+                into(if (File(plugins, archiveFileName.get()).exists()) File(plugins, "update") else plugins)
+            }
+        }
+    }
+
+    registerPluginJar("pluginJar", projectAPI, projectCORE, project) {
         findProject(":${rootProject.name}-dongle")?.let { dongleProject ->
             val dongleJar = dongleProject.tasks.jar
 
@@ -40,29 +46,16 @@ tasks {
         }
 
         exclude("test.yml")
-
-        doLast {
-            copyToDebugServer()
-        }
     }
 
     findProject(":${rootProject.name}-publish")?.let { publish ->
-        register<Jar>("testJar") {
-            archiveBaseName.set(pluginName)
-            archiveVersion.set("")
-
-            from(project.sourceSets["main"].output)
-
+        registerPluginJar("testJar", project) {
             exclude("plugin.yml")
             rename("test.yml", "plugin.yml")
 
             publish.tasks.let { tasks ->
                 dependsOn(tasks.named("publishApiPublicationToDebugRepository"))
                 dependsOn(tasks.named("publishCorePublicationToDebugRepository"))
-            }
-
-            doLast {
-                copyToDebugServer()
             }
         }
     }
