@@ -2,9 +2,9 @@ rootProject.name = "sample"
 
 val api = "${rootProject.name}-api"
 val core = "${rootProject.name}-core"
-val debug = "${rootProject.name}-plugin"
+val plugin = "${rootProject.name}-plugin"
 
-include(api, core, debug)
+include(api, core, plugin)
 
 val dongle = "${rootProject.name}-dongle"
 val dongleFile = file(dongle)
@@ -26,7 +26,7 @@ if (dongleFile.exists()) {
 }
 
 val publish = "${rootProject.name}-publish"
-val publishFile = file(dongle)
+val publishFile = file(publish)
 if (publishFile.exists()) {
     include(publish)
 }
