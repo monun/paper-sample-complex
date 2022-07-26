@@ -1,8 +1,8 @@
-package io.github.monun.sample.v1_17_1.internal
+package io.github.monun.sample.v1_19.internal
 
 import io.github.monun.sample.internal.Version
 import org.bukkit.Bukkit
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer
 
 class NMSVersion: Version {
     override val value: String

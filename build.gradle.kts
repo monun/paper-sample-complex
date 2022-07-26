@@ -1,6 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.6.10"
-    id("org.jetbrains.dokka") version "1.6.10" apply false
+    idea
+    kotlin("jvm") version "1.6.21"
+    id("org.jetbrains.dokka") version "1.6.21" apply false
 }
 
 java {
@@ -23,7 +24,7 @@ subprojects {
     }
 
     dependencies {
-        compileOnly("io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT")
+        compileOnly("io.papermc.paper:paper-api:${Dependency.Paper.Version}-R0.1-SNAPSHOT")
 
         implementation(kotlin("stdlib"))
         implementation(kotlin("reflect"))
@@ -72,5 +73,13 @@ tasks {
                 rename("publish")
             }
         }
+    }
+}
+
+idea {
+    module {
+        excludeDirs.add(file(".server"))
+        excludeDirs.addAll(allprojects.map { it.buildDir })
+        excludeDirs.addAll(allprojects.map { it.file(".gradle") })
     }
 }

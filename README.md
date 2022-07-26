@@ -32,8 +32,6 @@ API의 구현, 실제 실행 코드
 
 하위에 참조할 버전 이름의 프로젝트를 생성 `ex) v1.18`
 
-* `./gradlew jar` = subprojects#reobfJar
-
 이 프로젝트를 사용하지 않는다면 삭제해도 됩니다
 
 ---
@@ -42,18 +40,15 @@ API의 구현, 실제 실행 코드
 
 PaperMC 와 상호작용할 JavaPlugin 을 포함한 코드
 
-* `./gradlew pluginJar` Standalone 플러그인 빌드
-* `./gradlew testJar` PUBLISH 프로젝트가 있을때 라이브러리를 참조하는 플러그인 빌드
+* `./gradlew devJar` mojang mapped bundler jar
+* `./gradlew reobfJar` reobfusecated bundler jar
+* `./gradlew clipJar` clip jar
 
 ---
 
 #### PUBLISH `[optional]`
 
 배포용 프로젝트
-
-DONGLE 프로젝트를 사용할 경우 배포되는 CORE#jar가 PUBLISH#coreDongleJar 로 교체
-
-* `./gradlew coreDongleJar` CORE#jar + DONGLE#jar
 
 이 프로젝트를 사용하지 않는다면 삭제해도 됩니다
 

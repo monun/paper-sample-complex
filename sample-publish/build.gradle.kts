@@ -3,38 +3,21 @@ plugins {
     signing
 }
 
+project(":${rootProject.name}-plugin").tasks.named("clipJar") {
+    dependsOn(tasks.named("publishApiPublicationToServerRepository"))
+    dependsOn(tasks.named("publishCorePublicationToServerRepository"))
+}
+
 val projectAPI = project(":${rootProject.name}-api")
 val projectCORE = project(":${rootProject.name}-core")
-val projectDONGLE = findProject(":${rootProject.name}-dongle")
-
-if (projectDONGLE != null) {
-    projectCORE.tasks {
-        jar {
-            archiveClassifier.set("origin")
-        }
-    }
-
-    tasks {
-        create<Jar>("coreDongleJar") {
-            archiveBaseName.set(projectCORE.name)
-
-            from(projectCORE.sourceSets["main"].output)
-
-            val dongleJar = projectDONGLE.tasks.jar
-
-            dependsOn(dongleJar)
-            from(zipTree(dongleJar.get().archiveFile))
-        }
-    }
-}
 
 publishing {
     repositories {
         mavenLocal()
 
         maven {
-            name = "debug"
-            url = rootProject.uri(".debug/libraries")
+            name = "server"
+            url = rootProject.uri(".server/libraries")
         }
 
         maven {
@@ -102,8 +85,7 @@ publishing {
 
         create<MavenPublication>("core") {
             setup(projectCORE)
-
-            if (projectDONGLE != null) artifact(tasks["coreDongleJar"])
+            artifact(projectCORE.tasks.named("coreReobfJar"))
         }
     }
 }
