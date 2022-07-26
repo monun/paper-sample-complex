@@ -1,12 +1,10 @@
 rootProject.name = "sample"
 
-val api = "${rootProject.name}-api"
-val core = "${rootProject.name}-core"
-val plugin = "${rootProject.name}-plugin"
+val prefix = rootProject.name
 
-include(api, core, plugin)
+include("$prefix-api", "$prefix-core", "$prefix-plugin")
 
-val dongle = "${rootProject.name}-dongle"
+val dongle = "$prefix-dongle"
 val dongleFile = file(dongle)
 if (dongleFile.exists()) {
     include(dongle)
@@ -25,8 +23,5 @@ if (dongleFile.exists()) {
     }
 }
 
-val publish = "${rootProject.name}-publish"
-val publishFile = file(publish)
-if (publishFile.exists()) {
-    include(publish)
-}
+val publish = "$prefix-publish"
+if (file(publish).exists()) include(publish)
