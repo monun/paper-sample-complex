@@ -1,10 +1,7 @@
 import org.gradle.configurationcache.extensions.capitalized
 
-val projectAPI = project(":${rootProject.name}-api")
-val projectCORE = project(":${rootProject.name}-core")
-
 dependencies {
-    implementation(projectAPI)
+    implementation(projectApi)
 }
 
 extra.apply {
@@ -25,7 +22,7 @@ tasks {
     fun registerJar(
         classifier: String,
         bundleProject: Project? = null,
-        bundleTask: String? = null
+        bundleTask: TaskProvider<org.gradle.jvm.tasks.Jar>? = null
     ) = register<Jar>("${classifier}Jar") {
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set(classifier)
@@ -35,9 +32,9 @@ tasks {
         if (bundleProject != null) from(bundleProject.sourceSets["main"].output)
 
         if (bundleTask != null) {
-            projectCORE.tasks.named<Jar>(bundleTask).get().let { bundleJar ->
+            bundleTask.let { bundleJar ->
                 dependsOn(bundleJar)
-                from(zipTree(bundleJar.archiveFile))
+                from(zipTree(bundleJar.get().archiveFile))
             }
             exclude("clip.yml")
             rename("bundle.yml", "plugin.yml")
@@ -62,8 +59,8 @@ tasks {
         }
     }
 
-    registerJar("dev", projectAPI, "coreDevJar")
-    registerJar("reobf", projectAPI, "coreReobfJar")
+    registerJar("dev", projectApi, coreDevJar)
+    registerJar("reobf", projectApi, coreReobfJar)
     registerJar("clip")
 }
 
