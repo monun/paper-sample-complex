@@ -48,6 +48,7 @@ publishing {
 
             pom {
                 name.set(target.name)
+                description.set("Chaos! Destruction! Oblivion!")
                 url.set("https://github.com/monun/${rootProject.name}")
 
                 licenses {
