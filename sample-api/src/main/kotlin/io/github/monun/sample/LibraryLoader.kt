@@ -4,7 +4,14 @@ import org.bukkit.Bukkit
 import java.lang.reflect.InvocationTargetException
 
 object LibraryLoader {
-    @Suppress("UNCHECKED_CAST")
+
+    /**
+     * 구현 라이브러리 인스턴스를 로드합니다
+     *
+     * 패키지는 `<[type]의 패키지>.internal.<[type]의 이름>+Impl` 입니다.
+     *
+     * ex) `io.github.sample.Sample -> io.github.sample.internal.SampleImpl`
+     */
     fun <T> loadImplement(type: Class<T>, vararg initArgs: Any? = emptyArray()): T {
         val packageName = type.`package`.name
         val className = "${type.simpleName}Impl"
@@ -16,7 +23,8 @@ object LibraryLoader {
 
             val constructor = kotlin.runCatching {
                 internalClass.getConstructor(*parameterTypes)
-            }.getOrNull() ?: throw UnsupportedOperationException("${type.name} does not have Constructor for [${parameterTypes.joinToString()}]")
+            }.getOrNull()
+                ?: throw UnsupportedOperationException("${type.name} does not have Constructor for [${parameterTypes.joinToString()}]")
             constructor.newInstance(*initArgs) as T
         } catch (exception: ClassNotFoundException) {
             throw UnsupportedOperationException("${type.name} a does not have implement", exception)
@@ -32,7 +40,14 @@ object LibraryLoader {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * net.minecraft.server 를 지원하는 라이브러리 인스턴스를 로드합니다.
+     *
+     * 패키지는 <[type]의 패키지>.[minecraftVersion].NMS + <[type]의 이름> 입니다.
+     *
+     *
+     * ex) `io.github.sample.Sample -> io.github.sample.v1_18_R1.NMSSample`
+     */
     fun <T> loadNMS(type: Class<T>, vararg initArgs: Any? = emptyArray()): T {
         val packageName = type.`package`.name
         val className = "NMS${type.simpleName}"
@@ -51,16 +66,17 @@ object LibraryLoader {
         }
 
         return try {
-            val nmsClass = candidates.mapNotNull { candidate ->
+            val nmsClass = candidates.firstNotNullOfOrNull { candidate ->
                 try {
                     Class.forName(candidate, true, type.classLoader).asSubclass(type)
                 } catch (exception: ClassNotFoundException) {
                     null
                 }
-            }.firstOrNull() ?: throw ClassNotFoundException("Not found nms library class: $candidates")
+            } ?: throw ClassNotFoundException("Not found nms library class: $candidates")
             val constructor = kotlin.runCatching {
                 nmsClass.getConstructor(*parameterTypes)
-            }.getOrNull() ?: throw UnsupportedOperationException("${type.name} does not have Constructor for [${parameterTypes.joinToString()}]")
+            }.getOrNull()
+                ?: throw UnsupportedOperationException("${type.name} does not have Constructor for [${parameterTypes.joinToString()}]")
             constructor.newInstance(*initArgs) as T
         } catch (exception: ClassNotFoundException) {
             throw UnsupportedOperationException(
