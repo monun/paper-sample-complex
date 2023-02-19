@@ -8,7 +8,7 @@ extra.apply {
     set("pluginName", rootProject.name.split('-').joinToString("") { it.capitalize() })
     set("packageName", rootProject.name.replace("-", ""))
     set("kotlinVersion", Dependency.Kotlin.Version)
-    set("paperVersion", Dependency.Paper.Version)
+    set("paperVersion", Dependency.Paper.Version.split('.').take(2).joinToString("."))
 }
 
 tasks {
