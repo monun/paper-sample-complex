@@ -9,19 +9,5 @@ val Project.projectApi
 val Project.projectCore
     get() = subproject("core")
 
-val Project.projectDongle
-    get() = findProject(":${rootProject.name}-dongle")
-
 val Project.projectPlugin
     get() = subproject("plugin")
-
-private fun Project.coreTask(name: String) = projectCore.tasks.named(name, Jar::class.java)
-
-val Project.coreDevJar
-    get() = coreTask("coreDevJar")
-
-val Project.coreReobfJar
-    get() = coreTask("coreReobfJar")
-
-val Project.coreSourcesJar
-    get() = coreTask("sourcesJar")

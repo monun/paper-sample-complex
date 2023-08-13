@@ -1,7 +1,7 @@
 plugins {
     idea
-    kotlin("jvm") version Dependency.Kotlin.Version
-    id("org.jetbrains.dokka") version Dependency.Dokka.Version apply false
+    kotlin("jvm") version Libraries.Kotlin.Version
+    id("org.jetbrains.dokka") version Libraries.Dokka.Version apply false
 }
 
 java {
@@ -24,15 +24,10 @@ subprojects {
     }
 
     dependencies {
-        compileOnly("io.papermc.paper:paper-api:${Dependency.Paper.Version}-R0.1-SNAPSHOT")
+        compileOnly("io.papermc.paper:paper-api:${Libraries.Paper.Version}-R0.1-SNAPSHOT")
 
         implementation(kotlin("stdlib"))
         implementation(kotlin("reflect"))
-
-        // implementation("io.github.monun:kommand-api:latest.release")
-        // implementation("io.github.monun:tap-api:latest.release")
-        // implementation("io.github.monun:invfx-api:latest.release")
-        // implementation("io.github.monun:heartbeat-coroutines:latest.release")
     }
 }
 
@@ -73,7 +68,6 @@ tasks {
 
                 rename("api")
                 rename("core")
-                rename("dongle")
                 rename("plugin")
                 rename("publish")
             }

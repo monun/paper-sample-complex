@@ -1,11 +1,7 @@
 plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     `maven-publish`
     signing
-}
-
-projectPlugin.tasks.named("clipJar") {
-    dependsOn(tasks.named("publishApiPublicationToServerRepository"))
-    dependsOn(tasks.named("publishCorePublicationToServerRepository"))
 }
 
 publishing {
@@ -42,6 +38,7 @@ publishing {
     publications {
         fun MavenPublication.setup(target: Project) {
             artifactId = target.name
+
             from(target.components["java"])
             artifact(target.tasks["sourcesJar"])
             artifact(target.tasks["dokkaJar"])
@@ -83,9 +80,15 @@ publishing {
 
         create<MavenPublication>("core") {
             setup(projectCore)
-            artifact(coreReobfJar)
-        }
 
+            artifact(projectCore.tasks["reobfJar"]) {
+                classifier = null
+            }
+
+            if (hasProperty("dev")) {
+                artifact(projectCore.tasks["devJar"])
+            }
+        }
     }
 }
 
