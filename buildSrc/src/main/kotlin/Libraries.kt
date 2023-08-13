@@ -1,5 +1,3 @@
-import org.gradle.api.artifacts.Dependency
-
 object Libraries {
     object Kotlin {
         const val Version = "1.8.22"

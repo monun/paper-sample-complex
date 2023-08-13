@@ -1,5 +1,4 @@
 import org.gradle.api.Project
-import org.gradle.jvm.tasks.Jar
 
 private fun Project.subproject(name: String) = project(":${rootProject.name}-$name")
 
