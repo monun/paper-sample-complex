@@ -1,5 +1,5 @@
 plugins {
-    id("io.papermc.paperweight.userdev") version "1.5.5" apply false
+    alias(libs.plugins.paperweight) apply false
 }
 
 dependencies {
@@ -33,10 +33,9 @@ tasks {
 }
 
 subprojects {
-    apply(plugin = "io.papermc.paperweight.userdev")
+    apply(plugin = rootProject.libs.plugins.paperweight.get().pluginId)
     dependencies {
-        implementation(projectApi)
-        implementation(projectCore)
+        api(projectCore)
 
         val paperweight = (this as ExtensionAware).extensions.getByName("paperweight")
                 as io.papermc.paperweight.userdev.PaperweightUserDependenciesExtension

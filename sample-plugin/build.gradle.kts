@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
 import java.util.*
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
@@ -17,8 +17,8 @@ extra.apply {
         }
     })
     set("packageName", rootProject.name.replace("-", ""))
-    set("kotlinVersion", Libraries.Kotlin.VERSION)
-    set("paperVersion", Libraries.Paper.VERSION.split('.').take(2).joinToString("."))
+    set("kotlinVersion", libs.versions.kotlin)
+    set("paperVersion", libs.versions.paper.get().split('.').take(2).joinToString(separator = "."))
 
     val pluginLibraries = LinkedHashSet<String>()
 
